@@ -57,26 +57,55 @@ public class XmlDiff {
         }
     }
 
+    private static final Path CORE_HOME = Paths.get("/home/aloubyansky/git/wildfly-core/build/target/wildfly-core-4.0.0.Beta1-SNAPSHOT");
+    private static final Path SERVLET_HOME = Paths.get("/home/aloubyansky/git/wildfly/servlet-build/target/wildfly-servlet-12.0.0.Beta2-SNAPSHOT");
+    private static final Path WFULL_HOME = Paths.get("/home/aloubyansky/git/wildfly/build/target/wildfly-12.0.0.Alpha1-SNAPSHOT");
+    private static final Path PROVISIONED_HOME = Paths.get("/home/aloubyansky/pm-test");
+
     public static void main(String[] args) throws Exception {
 
-        final DiffedElem diff = diff(
-                // core
-                //Paths.get("/home/olubyans/git/wildfly-core/build/target/wildfly-core-3.0.0.Alpha17-SNAPSHOT/standalone/configuration/standalone.xml"),
-                // servlet
-                //Paths.get("/home/olubyans/git/wildfly/servlet-build/target/wildfly-servlet-11.0.0.Alpha1-SNAPSHOT/standalone/configuration/standalone.xml"),
-                // load-balancer
-                //Paths.get("/home/olubyans/git/wildfly/servlet-build/target/wildfly-servlet-11.0.0.Alpha1-SNAPSHOT/standalone/configuration/standalone-load-balancer.xml"),
-                // standalone
-                //Paths.get("/home/olubyans/git/wildfly/build/target/wildfly-11.0.0.Alpha1-SNAPSHOT/standalone/configuration/standalone.xml"),
-                // standalone-ha
-                //Paths.get("/home/olubyans/git/wildfly/build/target/wildfly-11.0.0.Alpha1-SNAPSHOT/standalone/configuration/standalone-ha.xml"),
-                // standalone-full
-                Paths.get("/home/olubyans/git/wildfly/build/target/wildfly-11.0.0.Alpha1-SNAPSHOT/standalone/configuration/standalone-full-ha.xml"),
-                "original",
-                Paths.get("/home/olubyans/pm-test/standalone/configuration/standalone.xml"),
-                "provisioned");
+        //diffStandalone(CORE_HOME, "standalone.xml");
+        //diffDomain(CORE_HOME, "domain.xml");
+        //diffDomain(CORE_HOME, "host.xml");
+        //diffDomain(CORE_HOME, "host-master.xml");
+        //diffDomain(CORE_HOME, "host-slave.xml");
 
+        //diffStandalone(SERVLET_HOME, "standalone.xml");
+        diffStandalone(SERVLET_HOME, "standalone-load-balancer.xml");
+        //diffDomain(SERVLET_HOME, "domain.xml");
+        //diffDomain(SERVLET_HOME, "host.xml");
+        //diffDomain(SERVLET_HOME, "host-master.xml");
+        //diffDomain(SERVLET_HOME, "host-slave.xml");
+
+        //diffStandalone(WFULL_HOME, "standalone.xml");
+        //diffStandalone(WFULL_HOME, "standalone-load-balancer.xml");
+        //diffStandalone(WFULL_HOME, "standalone-ha.xml");
+        //diffStandalone(WFULL_HOME, "standalone-full.xml");
+        //diffStandalone(WFULL_HOME, "standalone-full-ha.xml");
+        //diffDomain(WFULL_HOME, "domain.xml");
+        //diffDomain(WFULL_HOME, "host.xml");
+        //diffDomain(WFULL_HOME, "host-master.xml");
+        //diffDomain(WFULL_HOME, "host-slave.xml");
+    }
+
+    public static void diffStandalone(Path originalHome, String config) throws IOException, XMLStreamException {
+        final DiffedElem diff = diffStandalone(originalHome, "original", PROVISIONED_HOME, "provisioned", config);
         DiffPrinter.print(diff);
+    }
+
+    public static void diffDomain(Path originalHome, String config) throws IOException, XMLStreamException {
+        final DiffedElem diff = diffDomain(originalHome, "original", PROVISIONED_HOME, "provisioned", config);
+        DiffPrinter.print(diff);
+    }
+
+    private static DiffedElem diffStandalone(Path home1, String owner1, Path home2, String owner2, String config) throws IOException, XMLStreamException {
+        return diff(home1.resolve("standalone").resolve("configuration").resolve(config), owner1,
+                home2.resolve("standalone").resolve("configuration").resolve(config), owner2);
+    }
+
+    private static DiffedElem diffDomain(Path home1, String owner1, Path home2, String owner2, String config) throws IOException, XMLStreamException {
+        return diff(home1.resolve("domain").resolve("configuration").resolve(config), owner1,
+                home2.resolve("domain").resolve("configuration").resolve(config), owner2);
     }
 
     public static DiffedElem diff(Path xml1, String owner1, Path xml2, String owner2) throws IOException, XMLStreamException {

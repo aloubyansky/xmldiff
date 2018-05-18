@@ -30,7 +30,8 @@ import java.util.Set;
  */
 public class FSDiff {
 
-    private Path home1;
+    private static final String WFCORE_HOME = "/home/aloubyansky/git/wildfly-core";
+    private static final String WFLY_HOME = "/home/aloubyansky/git/wildfly";
 
     public static void main(String[] args) throws Exception {
 
@@ -39,28 +40,50 @@ public class FSDiff {
 //                "/home/aloubyansky/pm-scripts/kloop/home2");
 
 
-        //diffCore();
-        //diffServlet();
-        diffFull();
+        //diffCoreBuild();
+        //diffCoreDist();
 
+        //diffServletBuild();
+        //diffServletDist();
+
+        diffFullBuild();
+        //diffFullDist();
     }
 
-    private static void diffFull() throws Exception {
+    private static void diffFullBuild() throws Exception {
         new FSDiff().diff(
-                "/home/aloubyansky/git/wildfly/dist/target/wildfly-11.0.0.Final-SNAPSHOT",
-                "/home/aloubyansky/pm-test");
+                WFLY_HOME + "/build/target",
+                WFLY_HOME + "/build-legacy/target");
     }
 
-    private static void diffServlet() throws Exception {
+    private static void diffFullDist() throws Exception {
         new FSDiff().diff(
-                "/home/aloubyansky/git/wildfly/servlet-dist/target/wildfly-servlet-11.0.0.Final-SNAPSHOT",
-                "/home/aloubyansky/pm-test");
+                WFLY_HOME + "/dist/target",
+                WFLY_HOME + "/dist-legacy/target");
     }
 
-    private static void diffCore() throws Exception {
+    private static void diffServletBuild() throws Exception {
         new FSDiff().diff(
-                "/home/aloubyansky/git/wildfly-core/dist/target/wildfly-core-4.0.0.Alpha1-SNAPSHOT",
-                "/home/aloubyansky/pm-test");
+                WFLY_HOME + "/servlet-build/target",
+                WFLY_HOME + "/servlet-build-legacy/target");
+    }
+
+    private static void diffServletDist() throws Exception {
+        new FSDiff().diff(
+                WFLY_HOME + "/servlet-dist/target",
+                WFLY_HOME + "/servlet-dist-legacy/target");
+    }
+
+    private static void diffCoreBuild() throws Exception {
+        new FSDiff().diff(
+                WFCORE_HOME + "/build/target",
+                WFCORE_HOME + "/build-legacy/target");
+    }
+
+    private static void diffCoreDist() throws Exception {
+        new FSDiff().diff(
+                WFCORE_HOME + "/dist/target",
+                WFCORE_HOME + "/dist-legacy/target");
     }
 
     void diff(String p1, String p2) throws Exception {
@@ -68,7 +91,6 @@ public class FSDiff {
     }
 
     void diff(Path p1, Path p2) throws Exception {
-        home1 = p1;
         diff(p1, p2, 0);
     }
 

@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -57,50 +58,98 @@ public class XmlDiff {
         }
     }
 
-    private static final Path CORE_HOME = Paths.get("/home/aloubyansky/git/wildfly-core/build/target/wildfly-core-4.0.0.Beta1-SNAPSHOT");
-    private static final Path SERVLET_HOME = Paths.get("/home/aloubyansky/git/wildfly/servlet-build/target/wildfly-servlet-12.0.0.Beta2-SNAPSHOT");
-    private static final Path WFULL_HOME = Paths.get("/home/aloubyansky/git/wildfly/build/target/wildfly-12.0.0.Alpha1-SNAPSHOT");
-    private static final Path PROVISIONED_HOME = Paths.get("/home/aloubyansky/pm-test");
+    private static final Path CORE_HOME = Paths.get("/home/aloubyansky/git/wildfly-core");
+    private static final Path WFLY_HOME = Paths.get("/home/aloubyansky/git/wildfly");
+    private static final Path WFULL_HOME = Paths.get("/home/aloubyansky/git/wildfly/build/target/wildfly-13.0.0.Alpha1-SNAPSHOT");
 
     public static void main(String[] args) throws Exception {
 
-        //diffStandalone(CORE_HOME, "standalone.xml");
-        //diffDomain(CORE_HOME, "domain.xml");
-        //diffDomain(CORE_HOME, "host.xml");
-        //diffDomain(CORE_HOME, "host-master.xml");
-        //diffDomain(CORE_HOME, "host-slave.xml");
+        //diffStandalone(CORE_HOME, "standalone.xml", "build");
+        //diffStandalone(CORE_HOME, "standalone.xml", "dist");
+        //diffDomain(CORE_HOME, "domain.xml", "build");
+        //diffDomain(CORE_HOME, "domain.xml", "dist");
+        //diffDomain(CORE_HOME, "host.xml", "build");
+        //diffDomain(CORE_HOME, "host.xml", "dist");
+        //diffDomain(CORE_HOME, "host-master.xml", "build");
+        //diffDomain(CORE_HOME, "host-master.xml", "dist");
+        //diffDomain(CORE_HOME, "host-slave.xml", "build");
+        //diffDomain(CORE_HOME, "host-slave.xml", "dist");
 
-        //diffStandalone(SERVLET_HOME, "standalone.xml");
-        diffStandalone(SERVLET_HOME, "standalone-load-balancer.xml");
-        //diffDomain(SERVLET_HOME, "domain.xml");
-        //diffDomain(SERVLET_HOME, "host.xml");
-        //diffDomain(SERVLET_HOME, "host-master.xml");
-        //diffDomain(SERVLET_HOME, "host-slave.xml");
+        //diffStandalone(WFLY_HOME, "standalone.xml", "servlet-build");
+        //diffStandalone(SERVLET_HOME, "standalone.xml", "servlet-dist");
+        //diffStandalone(SERVLET_HOME, "standalone-load-balancer.xml", "servlet-build");
+        //diffStandalone(SERVLET_HOME, "standalone-load-balancer.xml", "servlet-dist");
+        //diffDomain(SERVLET_HOME, "domain.xml", "servlet-build");
+        //diffDomain(SERVLET_HOME, "domain.xml", "servlet-dist");
+        //diffDomain(SERVLET_HOME, "host.xml", "servlet-build");
+        //diffDomain(SERVLET_HOME, "host.xml", "servlet-dist");
+        //diffDomain(SERVLET_HOME, "host-slave.xml", "servlet-build");
+        //diffDomain(SERVLET_HOME, "host-slave.xml", "servlet-dist");
+        //diffDomain(SERVLET_HOME, "host-master.xml", "servlet-build");
+        //diffDomain(SERVLET_HOME, "host-master.xml", "servlet-dist");
 
-        //diffStandalone(WFULL_HOME, "standalone.xml");
-        //diffStandalone(WFULL_HOME, "standalone-load-balancer.xml");
-        //diffStandalone(WFULL_HOME, "standalone-ha.xml");
-        //diffStandalone(WFULL_HOME, "standalone-full.xml");
-        //diffStandalone(WFULL_HOME, "standalone-full-ha.xml");
-        //diffDomain(WFULL_HOME, "domain.xml");
-        //diffDomain(WFULL_HOME, "host.xml");
-        //diffDomain(WFULL_HOME, "host-master.xml");
-        //diffDomain(WFULL_HOME, "host-slave.xml");
+        //diffStandalone(WFLY_HOME, "standalone-activemq-colocated.xml", "build");
+        //diffStandalone(WFLY_HOME, "standalone-picketlink.xml", "build");
+        //diffStandalone(WFLY_HOME, "standalone-minimalistic.xml", "build");
+
+        //diffStandalone(WFLY_HOME, "standalone.xml", "build");
+        //diffStandalone(WFLY_HOME, "standalone.xml", "dist");
+        //diffStandalone(WFLY_HOME, "standalone-load-balancer.xml", "build");
+        //diffStandalone(WFLY_HOME, "standalone-load-balancer.xml", "dist");
+        //diffStandalone(WFLY_HOME, "standalone-ha.xml", "build");
+        //diffStandalone(WFLY_HOME, "standalone-ha.xml", "dist");
+        //diffStandalone(WFLY_HOME, "standalone-full.xml", "build");
+        //diffStandalone(WFLY_HOME, "standalone-full.xml", "dist");
+        //diffStandalone(WFLY_HOME, "standalone-full-ha.xml", "build");
+        //diffStandalone(WFLY_HOME, "standalone-full-ha.xml", "dist");
+        diffStandalone(WFLY_HOME, "standalone-ee8.xml", "build");
+        //diffStandalone(WFLY_HOME, "standalone-ee8.xml", "dist");
+        //diffDomain(WFLY_HOME, "host.xml", "build");
+        //diffDomain(WFLY_HOME, "host.xml", "dist");
+        //diffDomain(WFLY_HOME, "host-slave.xml", "build");
+        //diffDomain(WFLY_HOME, "host-slave.xml", "dist");
+        //diffDomain(WFLY_HOME, "host-master.xml", "build");
+        //diffDomain(WFLY_HOME, "host-master.xml", "dist");
+
+
+        //diffExample(WFLY_HOME, "standalone-activemq-colocated.xml");
+        //diffExample(WFLY_HOME, "standalone-azure-full-ha.xml");
+        //diffExample(WFLY_HOME, "standalone-azure-ha.xml");
+        //diffExample(WFLY_HOME, "standalone-ec2-full-ha.xml");
+        //diffExample(WFLY_HOME, "standalone-ec2-ha.xml");
+        //diffExample(WFLY_HOME, "standalone-genericjms.xml");
+        //diffExample(WFLY_HOME, "standalone-gossip-full-ha.xml");
+        //diffExample(WFLY_HOME, "standalone-gossip-ha.xml");
+        //diffExample(WFLY_HOME, "standalone-jts.xml");
+        //diffExample(WFLY_HOME, "standalone-minimalistic.xml");
+        //diffExample(WFLY_HOME, "standalone-picketlink.xml");
+        //diffExample(WFLY_HOME, "standalone-rts.xml");
+        //diffExample(WFLY_HOME, "standalone-xts.xml");
     }
 
-    public static void diffStandalone(Path originalHome, String config) throws IOException, XMLStreamException {
-        final DiffedElem diff = diffStandalone(originalHome, "original", PROVISIONED_HOME, "provisioned", config);
+    public static void diffStandalone(Path originalHome, String config, String module) throws IOException, XMLStreamException {
+        final DiffedElem diff = diffStandalone(resolveDistDir(originalHome, module + "-legacy"), "original", resolveDistDir(originalHome, module), "provisioned", config);
         DiffPrinter.print(diff);
     }
 
-    public static void diffDomain(Path originalHome, String config) throws IOException, XMLStreamException {
-        final DiffedElem diff = diffDomain(originalHome, "original", PROVISIONED_HOME, "provisioned", config);
+    public static void diffExample(Path originalHome, String config) throws IOException, XMLStreamException {
+        final DiffedElem diff = diffExample(resolveDistDir(originalHome, "dist-legacy"), "original", resolveDistDir(originalHome, "dist"), "provisioned", config);
+        DiffPrinter.print(diff);
+    }
+
+    public static void diffDomain(Path originalHome, String config, String module) throws IOException, XMLStreamException {
+        final DiffedElem diff = diffDomain(resolveDistDir(originalHome, module + "-legacy"), "original", resolveDistDir(originalHome, module), "provisioned", config);
         DiffPrinter.print(diff);
     }
 
     private static DiffedElem diffStandalone(Path home1, String owner1, Path home2, String owner2, String config) throws IOException, XMLStreamException {
         return diff(home1.resolve("standalone").resolve("configuration").resolve(config), owner1,
                 home2.resolve("standalone").resolve("configuration").resolve(config), owner2);
+    }
+
+    private static DiffedElem diffExample(Path home1, String owner1, Path home2, String owner2, String config) throws IOException, XMLStreamException {
+        return diff(home1.resolve("docs").resolve("examples").resolve("configs").resolve(config), owner1,
+                home2.resolve("docs").resolve("examples").resolve("configs").resolve(config), owner2);
     }
 
     private static DiffedElem diffDomain(Path home1, String owner1, Path home2, String owner2, String config) throws IOException, XMLStreamException {
@@ -713,5 +762,32 @@ public class XmlDiff {
                 print('>');
             }
         }
+    }
+
+    private static Path resolveDistDir(Path home, String module) {
+        Path dist = home.resolve(module).resolve("target");
+        if(!Files.exists(dist)) {
+            throw new IllegalStateException("Path does not exist " + dist);
+        }
+        try(Stream<Path> stream = Files.list(dist)) {
+            final Iterator<Path> i = stream.iterator();
+            dist = null;
+            while(i.hasNext()) {
+                final Path p = i.next();
+                if(!Files.isDirectory(p) || !p.getFileName().toString().startsWith("wildfly-")) {
+                    continue;
+                }
+                if(dist != null) {
+                    throw new IllegalStateException("More than one candidate");
+                }
+                dist = p;
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to read children of " + dist, e);
+        }
+        if(dist == null) {
+            throw new IllegalStateException("Failed to locate a dist dir in " + home.resolve(module).resolve("target"));
+        }
+        return dist;
     }
 }
